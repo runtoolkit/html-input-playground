@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --tooltip-bg: #111;
+            --tooltip-text: #fff;
+        }
+
+        body.light {
+            --bg: #f1f5f9;
+            --tooltip-bg: #fff;
+            --tooltip-text: #111;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            position: relative;
+            overflow: hidden;
+            padding: 14px 24px;
+            font-size: 20px;
+            font-weight: bold;
+            background: #38bdf8;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        /* Tooltip */
+        button::after {
+            content: "Ana sayfaya git";
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        /* Arrow */
+        button::before {
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) translateY(6px);
+            border: 6px solid transparent;
+            border-top-color: var(--tooltip-bg);
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        /* Hover (9s delay) */
+        button:hover::after,
+        button:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            transition-delay: 9s;
+        }
+    </style>
+</head>
+<body>
+
+<button id="btn">Click here</button>
+
+<script>
+const btn = document.getElementById("btn");
+
+btn.addEventListener("click", () => {
+    btn.disabled = true;
+    btn.textContent = "Yükleniyor...";
+
+    setTimeout(() => {
+        window.location.href = "./home.html";
+    }, 500);
+});
+</script>
+
+</body>
+</html>

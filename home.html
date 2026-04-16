@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Input Playground</title>
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #ffffff;
+            --accent: #38bdf8;
+        }
+
+        body.light {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --accent: #0ea5e9;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            transition: 0.3s;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            max-width: 400px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(10px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: var(--accent);
+            color: black;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: scale(0.97); }
+
+        .secondary {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text);
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .info {
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .settings {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+        }
+
+        /* YENİ: modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            width: 300px;
+            text-align: center;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="settings">
+    <button class="btn secondary" onclick="toggleTheme()">🌗</button>
+    <button class="btn secondary" onclick="openSettings()">⚙️</button>
+</div>
+
+<div class="card">
+    <h2>🚀 HTML Input Playground</h2>
+    <p>Modern HTML input ve form örneklerini keşfet.</p>
+
+    <div class="row">
+        <a href="src/main.html" class="btn" onclick="remember()">Aç</a>
+        <button class="btn secondary" onclick="toggleTheme()">Tema</button>
+        <button class="btn secondary" onclick="openLast()">Son Açılan</button>
+        <button class="btn secondary" onclick="resetAll()">Sıfırla</button>
+    </div>
+
+    <div class="info">
+        ⌨️ Enter: Aç • T: Tema • S: Ayarlar
+    </div>
+</div>
+
+<!-- YENİ: Ayarlar -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>⚙️ Ayarlar</h3>
+
+        <label>Sayfa seç:</label>
+        <select id="pageSelect">
+            <option value="src/main.html">Ana Menü</option>
+            <option value="src/examples/text_input.html">Text</option>
+            <option value="src/examples/color_input.html">Color</option>
+            <option value="src/examples/date_input.html">Date</option>
+        </select>
+
+        <div class="row">
+            <button class="btn" onclick="goPage()">Git</button>
+            <button class="btn secondary" onclick="closeSettings()">Kapat</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const DEFAULT_PAGE = "src/main.html";
+
+    // Tema yükle
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") document.body.classList.add("light");
+
+    function toggleTheme() {
+        document.body.classList.toggle("light");
+        localStorage.setItem("theme",
+            document.body.classList.contains("light") ? "light" : "dark"
+        );
+    }
+
+    function remember() {
+        localStorage.setItem("last_opened", DEFAULT_PAGE);
+    }
+
+    function openLast() {
+        const last = localStorage.getItem("last_opened");
+        if (last) window.location.href = last;
+    }
+
+    function resetAll() {
+        localStorage.clear();
+        location.reload();
+    }
+
+    // Enter ile aç
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") window.location.href = DEFAULT_PAGE;
+        if (e.key.toLowerCase() === "t") toggleTheme();
+        if (e.key.toLowerCase() === "s") openSettings();
+    });
+
+    // Modal
+    function openSettings() {
+        document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeSettings() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    function goPage() {
+        const val = document.getElementById("pageSelect").value;
+        localStorage.setItem("last_opened", val);
+        window.location.href = val;
+    }
+
+    // Son açılan info
+    const last = localStorage.getItem("last_opened");
+    if (last) {
+        const info = document.createElement("div");
+        info.className = "info";
+        info.textContent = "Son açılan: " + last;
+        document.querySelector(".card").appendChild(info);
+    }
+</script>
+
+</body>
+</html>
