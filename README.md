@@ -33,7 +33,7 @@ Modern HTML input ve form öğelerini interaktif olarak test edebileceğin bir p
 ### 1. Projeyi indir
 
 ```bash
-git clone https://github.com/USERNAME/html-input-playground.git
+git clone https://github.com/runtoolkit/html-input-playground.git
 ```
 
 ### 2. Local server başlat (önerilir)
